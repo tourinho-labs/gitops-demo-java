@@ -1,0 +1,12 @@
+# Kargo Project do app: namespace de Warehouse/Stages/Freight + credencial de git.
+apiVersion: kargo.akuity.io/v1alpha1
+kind: Project
+metadata:
+  name: demo-java
+spec:
+  # Auto-promove dev e hml; prod é manual.
+  promotionPolicies:
+    - stage: dev
+      autoPromotionEnabled: true
+    - stage: hml
+      autoPromotionEnabled: true

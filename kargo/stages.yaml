@@ -1,0 +1,99 @@
+# Corrente de promoção: dev ← Warehouse, hml ← dev, prod ← hml.
+---
+apiVersion: kargo.akuity.io/v1alpha1
+kind: Stage
+metadata:
+  name: dev
+  namespace: demo-java
+spec:
+  requestedFreight:
+    - origin:
+        kind: Warehouse
+        name: demo-java
+      sources:
+        direct: true
+  promotionTemplate:
+    spec:
+      steps:
+        - task:
+            name: promote-helm
+            kind: ClusterPromotionTask
+          vars:
+            - { name: env, value: dev }
+            - { name: repoURL, value: https://github.com/tourinho-labs/gitops-demo-java.git }
+            - { name: image, value: ghcr.io/tourinho-labs/demo-java }
+            - { name: chartKey, value: backend }
+            - { name: app, value: demo-java }
+  verification:
+    analysisTemplates:
+      - name: smoke
+        kind: ClusterAnalysisTemplate
+    args:
+      - { name: app, value: demo-java }
+      - { name: env, value: dev }
+---
+apiVersion: kargo.akuity.io/v1alpha1
+kind: Stage
+metadata:
+  name: hml
+  namespace: demo-java
+spec:
+  requestedFreight:
+    - origin:
+        kind: Warehouse
+        name: demo-java
+      sources:
+        stages: [dev]              # só Freight verified no dev
+        requiredSoakTime: 30m      # cozinha no dev antes de elegível
+  promotionTemplate:
+    spec:
+      steps:
+        - task:
+            name: promote-helm
+            kind: ClusterPromotionTask
+          vars:
+            - { name: env, value: hml }
+            - { name: repoURL, value: https://github.com/tourinho-labs/gitops-demo-java.git }
+            - { name: image, value: ghcr.io/tourinho-labs/demo-java }
+            - { name: chartKey, value: backend }
+            - { name: app, value: demo-java }
+  verification:
+    analysisTemplates:
+      - name: smoke
+        kind: ClusterAnalysisTemplate
+    args:
+      - { name: app, value: demo-java }
+      - { name: env, value: hml }
+---
+apiVersion: kargo.akuity.io/v1alpha1
+kind: Stage
+metadata:
+  name: prod
+  namespace: demo-java
+spec:
+  requestedFreight:
+    - origin:
+        kind: Warehouse
+        name: demo-java
+      sources:
+        stages: [hml]              # só Freight verified no hml
+  # Sem entry no ProjectConfig → promoção MANUAL (operador aprova no Kargo).
+  promotionTemplate:
+    spec:
+      steps:
+        - task:
+            name: promote-helm
+            kind: ClusterPromotionTask
+          vars:
+            - { name: env, value: prod }
+            - { name: repoURL, value: https://github.com/tourinho-labs/gitops-demo-java.git }
+            - { name: image, value: ghcr.io/tourinho-labs/demo-java }
+            - { name: chartKey, value: backend }
+            - { name: app, value: demo-java }
+  verification:
+    analysisTemplates:
+      - name: smoke
+        kind: ClusterAnalysisTemplate
+    args:
+      - { name: app, value: demo-java }
+      - { name: env, value: prod }

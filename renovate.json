@@ -1,0 +1,13 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "helmv3": { "enabled": true },
+  "packageRules": [
+    {
+      "description": "Bump do arquetipo central (OCI) abre PR neste repo",
+      "matchManagers": ["helmv3"],
+      "matchDatasources": ["docker"],
+      "semanticCommits": "enabled"
+    }
+  ]
+}

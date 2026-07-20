@@ -1,0 +1,11 @@
+apiVersion: v2
+name: demo-java
+description: demo-java
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+# Consome o arquétipo central por versão (bump via Renovate).
+dependencies:
+  - name: backend
+    version: "2.4.4"
+    repository: oci://ghcr.io/tourinhom/charts

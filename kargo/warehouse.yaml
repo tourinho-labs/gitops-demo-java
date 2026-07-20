@@ -1,0 +1,14 @@
+# Observa a image no ghcr e cria Freight (pin por digest) a cada tag nova.
+apiVersion: kargo.akuity.io/v1alpha1
+kind: Warehouse
+metadata:
+  name: demo-java
+  namespace: demo-java
+spec:
+  freightCreationPolicy: Automatic
+  subscriptions:
+    - image:
+        repoURL: ghcr.io/tourinho-labs/demo-java
+        imageSelectionStrategy: SemVer   # segue a tag semver do ci-tag (v1.2.0)
+        discoveryLimit: 20
+        strictSemvers: true

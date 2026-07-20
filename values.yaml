@@ -1,0 +1,7 @@
+# Base materializada pelo config-sync a partir do repo de código.
+backend:
+  team: platform-lab
+  system: platform-lab
+  port: 8080
+  replicas: 2
+  perfil: 2-api
