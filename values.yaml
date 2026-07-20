@@ -1,7 +1,17 @@
-# Base materializada pelo config-sync a partir do repo de código.
+# Contrato de deploy do dev (base, comum a todos os ambientes); edite aqui e dê push.
 backend:
-  team: platform-lab
-  system: platform-lab
-  port: 8080
-  replicas: 2
-  perfil: 2-api
+  team: platform-lab     # dono do serviço (label + FinOps). Ajuste pro squad.
+  system: platform-lab   # system do catálogo.
+  port: 8080                     # porta do container.
+  replicas: 2                    # réplicas (base; por-env em values/<env>.yaml).
+  perfil: 2-api                  # 1-front | 2-api | 3-processamento | 4-custom
+  health:                        # path por stack: js=/health, java=/actuator/health.
+    liveness: /actuator/health/liveness
+    readiness: /actuator/health/readiness
+
+  # Opcionais (omita = default do arquétipo):
+  # autoscaling: { enabled: true, min: 2, max: 6, cpu: 70 }
+  # rota: { path: /, pathType: Prefix }   # publica via Ingress (host é convenção)
+  # health: { startupTimeout: 120s }      # só se o boot é lento
+  # env:                                    # lista k8s-native; não use pra segredo
+  #   - { name: LOG_LEVEL, value: info }

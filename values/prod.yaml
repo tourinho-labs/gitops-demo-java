@@ -1,1 +1,4 @@
-# Delta prod — materializado pelo config-sync; vazio = usa a base.
+# Delta prd — só o que difere da base. Exemplo:
+# backend:
+#   replicas: 4
+#   autoscaling: { enabled: true, min: 3, max: 10, cpu: 70 }
