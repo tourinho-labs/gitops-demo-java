@@ -1,0 +1,3 @@
+# Semente copiada pra values/<env>.image.yaml na 1ª promoção de cada env.
+backend:
+  image: ghcr.io/tourinho-labs/demo-java@sha256:aacae09f9b0fd7ae87ef835c25ffa210a4a70709c791d3d953ce8c19683ca086
