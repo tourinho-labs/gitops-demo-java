@@ -8,6 +8,9 @@ backend:
   health:                        # path por stack: js=/health, java=/actuator/health.
     liveness: /actuator/health/liveness
     readiness: /actuator/health/readiness
+  metrics:                        # path por stack: js=/metrics, java=/actuator/prometheus.
+    enabled: true
+    path: /actuator/prometheus
 
   # Opcionais (omita = default do arquétipo):
   # autoscaling: { enabled: true, min: 2, max: 6, cpu: 70 }
